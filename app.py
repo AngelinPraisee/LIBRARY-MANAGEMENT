@@ -1,8 +1,10 @@
 import streamlit as st
 import sqlite3
+import os
 
 # --- DATABASE CONNECTION ---
-conn = sqlite3.connect('data/library.db')
+db_path = os.path.join(os.getcwd(), "library.db")
+conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 cursor.execute('''
@@ -34,6 +36,9 @@ elif choice == "Add Book":
     title = st.text_input("Book Title")
     author = st.text_input("Author")
     if st.button("Add Book"):
-        cursor.execute("INSERT INTO books (title, author, available) VALUES (?, ?, 1)", (title, author))
+        cursor.execute(
+            "INSERT INTO books (title, author, available) VALUES (?, ?, 1)",
+            (title, author),
+        )
         conn.commit()
         st.success("✅ Book added successfully!")
